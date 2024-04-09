@@ -153,7 +153,7 @@ final class Validator
     public static function assertIsType(string $var_name, $value, array $allowed_types,
         string $ex_class = Ex\InvalidTypeException::class): void
     {
-        if (empty($allowed_types)) {
+        if ($allowed_types === []) {
             throw new \InvalidArgumentException('The $allowed_types array cannot be empty.');
         }
 
@@ -172,7 +172,7 @@ final class Validator
         // Get current type of the $value and next, validate
         $value_type = \gettype($value);
 
-        if (! empty($tmp)) {
+        if ($tmp !== []) {
             if (! \in_array($value_type, $allowed_types, true)) {
                 // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
                 /** @var \Exception $ex_class */

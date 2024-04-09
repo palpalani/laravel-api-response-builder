@@ -143,7 +143,7 @@ class Converter
             Type::STRING,
         ]);
 
-        if ($result === null && \is_object($data)) {
+        if (\is_object($data)) {
             $cfg = $this->getClassMappingConfigOrThrow($data);
             $worker = new $cfg[RB::KEY_HANDLER];
             /** @var ConverterContract $worker */
@@ -213,7 +213,7 @@ class Converter
                 \sprintf('"%s" must be an array (%s found)', RB::CONF_KEY_CONVERTER_CLASSES, \gettype($classes)));
         }
 
-        if (! empty($classes)) {
+        if ($classes !== []) {
             $mandatory_keys = [
                 RB::KEY_HANDLER => [Type::STRING],
                 RB::KEY_KEY => [Type::STRING, Type::NULL],
@@ -254,7 +254,7 @@ class Converter
                 \sprintf('"%s" mapping must be an array (%s found)', RB::CONF_KEY_CONVERTER_PRIMITIVES, \gettype($primitives)));
         }
 
-        if (! empty($primitives)) {
+        if ($primitives !== []) {
             $mandatory_keys = [
                 RB::KEY_KEY,
             ];

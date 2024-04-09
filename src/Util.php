@@ -45,12 +45,7 @@ final class Util
                         "mergeConfig(): Cannot merge '{$m_type}' into '{$orig_type}' for key '{$m_key}'.");
                 }
 
-                if (\is_array($m_val)) {
-                    /** @noinspection PhpUnnecessaryStaticReferenceInspection */
-                    $array[$m_key] = self::mergeConfig($original[$m_key], $m_val);
-                } else {
-                    $array[$m_key] = $m_val;
-                }
+                $array[$m_key] = \is_array($m_val) ? self::mergeConfig($original[$m_key], $m_val) : $m_val;
             } else {
                 $array[$m_key] = $m_val;
             }

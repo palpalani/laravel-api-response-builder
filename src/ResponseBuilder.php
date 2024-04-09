@@ -42,7 +42,7 @@ class ResponseBuilder extends ResponseBuilderBase
     protected array $http_headers = [];
 
     /** @var mixed|null */
-    protected $data = null;
+    protected $data;
 
     // ---------------------------------------------------------------------------------------------
 
@@ -377,7 +377,7 @@ class ResponseBuilder extends ResponseBuilderBase
             $data = (object) $data;
         }
 
-        if ($data === null && Config::get(RB::CONF_KEY_DATA_ALWAYS_OBJECT, false)) {
+        if (! $data instanceof \stdClass && Config::get(RB::CONF_KEY_DATA_ALWAYS_OBJECT, false)) {
             $data = (object) [];
         }
 

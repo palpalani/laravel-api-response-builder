@@ -54,7 +54,8 @@
     "phpunit/php-code-coverage": "^10.0|^11.0",
     "larastan/larastan": "^2.0",
     "marcin-orlowski/php-lockpick": "^1.0",
-    "laravel/pint": "^1.15"
+    "laravel/pint": "^1.15",
+    "rector/rector": "^1.0"
   },
   "scripts": {
     "test": "vendor/bin/phpunit -c tests/phpunit.xml",
