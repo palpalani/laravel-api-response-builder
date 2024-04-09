@@ -70,7 +70,7 @@ class Converter
         }
 
         if ($this->debug_enabled) {
-            Log::debug(__CLASS__.": Converting primitive type of '{$type}' to data node with key '{$result[RB::KEY_KEY]}'.");
+            Log::debug(__CLASS__.sprintf(': Converting primitive type of \'%s\' to data node with key \'%s\'.', $type, $result[RB::KEY_KEY]));
         }
 
         return $result;
@@ -99,7 +99,7 @@ class Converter
                 /** @var string $class_name */
                 if ($data instanceof $class_name) {
                     $result = $this->classes[$class_name];
-                    $debug_result = "subclass of {$class_name}";
+                    $debug_result = 'subclass of '.$class_name;
                     break;
                 }
             }
@@ -111,7 +111,7 @@ class Converter
         }
 
         if ($this->debug_enabled) {
-            Log::debug(__CLASS__.": Converting {$cls} using {$result[RB::KEY_HANDLER]} because: {$debug_result}.");
+            Log::debug(__CLASS__.sprintf(': Converting %s using %s because: %s.', $cls, $result[RB::KEY_HANDLER], $debug_result));
         }
 
         return $result;
@@ -161,7 +161,7 @@ class Converter
         }
 
         if (\is_bool($data) || \is_float($data) || \is_int($data) || \is_string($data)) {
-            $result = [$this->getPrimitiveMappingConfigOrThrow($data)[RB::KEY_KEY] => $data];
+            return [$this->getPrimitiveMappingConfigOrThrow($data)[RB::KEY_KEY] => $data];
         }
 
         return $result;
@@ -221,12 +221,13 @@ class Converter
             foreach ($classes as $class_name => $class_config) {
                 if (! \is_array($class_config)) {
                     throw new Ex\InvalidConfigurationElementException(
-                        sprintf("Config for '{$class_name}' class must be an array (%s found).", \gettype($class_config)));
+                        sprintf(sprintf('Config for \'%s\' class must be an array (%%s found).', $class_name), \gettype($class_config)));
                 }
+
                 foreach ($mandatory_keys as $key_name => $allowed_types) {
                     if (! \array_key_exists($key_name, $class_config)) {
                         throw new Ex\IncompleteConfigurationException(
-                            "Missing '{$key_name}' entry in '{$class_name}' class mapping config.");
+                            sprintf('Missing \'%s\' entry in \'%s\' class mapping config.', $key_name, $class_name));
                     }
 
                     Validator::assertIsType(RB::KEY_KEY, $class_config[$key_name], $allowed_types);
@@ -262,12 +263,13 @@ class Converter
             foreach ($primitives as $type => $config) {
                 if (! \is_array($config)) {
                     throw new Ex\InvalidConfigurationElementException(
-                        sprintf("Config for '{$type}' primitive must be an array (%s found).", \gettype($config)));
+                        sprintf(sprintf('Config for \'%s\' primitive must be an array (%%s found).', $type), \gettype($config)));
                 }
+
                 foreach ($mandatory_keys as $key_name) {
                     if (! \array_key_exists($key_name, $config)) {
                         throw new Ex\IncompleteConfigurationException(
-                            "Missing '{$key_name}' entry in '{$type}' primitive mapping config.");
+                            sprintf('Missing \'%s\' entry in \'%s\' primitive mapping config.', $key_name, $type));
                     }
                 }
             }

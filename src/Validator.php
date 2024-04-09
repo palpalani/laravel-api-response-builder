@@ -248,11 +248,13 @@ final class Validator
                 if ($string_keys_cnt > 0) {
                     throw new Ex\ArrayWithMixedKeysException;
                 }
+
                 $int_keys_cnt++;
             } else {
                 if ($int_keys_cnt > 0) {
                     throw new Ex\ArrayWithMixedKeysException;
                 }
+
                 $string_keys_cnt++;
             }
         }

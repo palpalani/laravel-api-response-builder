@@ -153,9 +153,10 @@ class ResponseBuilder extends ResponseBuilderBase
             Validator::assertIsIntRange('api_code', $api_code,
                 BaseApiCodes::getMinCode(), BaseApiCodes::getMaxCode());
         }
+
         if ($api_code === $code_ok) {
             throw new \OutOfBoundsException(
-                "Error response cannot use api_code of value {$code_ok} which is reserved for OK.");
+                sprintf('Error response cannot use api_code of value %d which is reserved for OK.', $code_ok));
         }
 
         return new static(false, $api_code);
@@ -268,26 +269,20 @@ class ResponseBuilder extends ResponseBuilderBase
 
         $msg_or_api_code = $this->message ?? $api_code;
         $http_headers = $this->http_headers ?? [];
-
         if ($this->success) {
             $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_OK;
-
             Validator::assertOkHttpCode($http_code);
 
-            $result = $this->make($this->success, $api_code,
+            return $this->make($this->success, $api_code,
                 $msg_or_api_code, $this->data, $http_code,
                 $this->placeholders, $http_headers, $this->json_opts);
-        } else {
-            $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_ERROR;
-
-            Validator::assertErrorHttpCode($http_code);
-
-            $result = $this->make(false, $api_code, $msg_or_api_code,
-                $this->data, $http_code, $this->placeholders,
-                $this->http_headers, $this->json_opts, $this->debug_data);
         }
+        $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_ERROR;
+        Validator::assertErrorHttpCode($http_code);
 
-        return $result;
+        return $this->make(false, $api_code, $msg_or_api_code,
+            $this->data, $http_code, $this->placeholders,
+            $this->http_headers, $this->json_opts, $this->debug_data);
     }
 
     /**
@@ -444,7 +439,7 @@ class ResponseBuilder extends ResponseBuilderBase
         // so static analysers will alarm if that case is not taken care of.
         $msg = \Lang::get($key, $placeholders);
         if (\is_array($msg)) {
-            $msg = \implode('', $msg);
+            return \implode('', $msg);
         }
 
         return $msg;

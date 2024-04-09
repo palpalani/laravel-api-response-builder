@@ -42,7 +42,7 @@ final class Util
                 $m_type = \gettype($m_val);
                 if ($orig_type !== $m_type) {
                     throw new Ex\IncompatibleTypeException(
-                        "mergeConfig(): Cannot merge '{$m_type}' into '{$orig_type}' for key '{$m_key}'.");
+                        sprintf('mergeConfig(): Cannot merge \'%s\' into \'%s\' for key \'%s\'.', $m_type, $orig_type, $m_key));
                 }
 
                 $array[$m_key] = \is_array($m_val) ? self::mergeConfig($original[$m_key], $m_val) : $m_val;

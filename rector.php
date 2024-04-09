@@ -8,4 +8,9 @@ return RectorConfig::configure()
         // __DIR__ . '/src/WholeDirectory',
     ])
     // ->withIndent(indentChar: ' ', indentSize: 4)
-    ->withPreparedSets(deadCode: true, codeQuality: true);
+    ->withPreparedSets(
+        deadCode: true,
+        earlyReturn: true,
+        codeQuality: true,
+        codingStyle: true
+    );

@@ -151,7 +151,7 @@ class ExceptionHandlerHelper
     {
         // exception message is uselss, lets go deeper
         if ($ex instanceof HttpException) {
-            $error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
+            $error_message = Lang::get('response-builder::builder.http_'.$http_code, $placeholders);
         } else {
             // Still got nothing? Fall back to built-in generic message for this type of exception.
             $http_ex_cls = HttpException::class;
@@ -165,7 +165,7 @@ class ExceptionHandlerHelper
 
         // As Lang::get() is documented to also returning arrays(?)...
         if (is_array($error_message)) {
-            $error_message = implode('', $error_message);
+            return implode('', $error_message);
         }
 
         return $error_message;
@@ -231,6 +231,7 @@ class ExceptionHandlerHelper
             // Not a valid code, let's try to get the exception status.
             $http_code = $ex_http_code;
         }
+
         // Can it be considered a valid HTTP error code?
         if ($http_code < RB::ERROR_HTTP_CODE_MIN) {
             // We now handle uncaught exception, so we cannot throw another one if there's

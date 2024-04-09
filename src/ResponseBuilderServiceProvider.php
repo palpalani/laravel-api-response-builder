@@ -50,7 +50,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
     {
         foreach ($this->config_files as $file) {
             /** @noinspection PhpUnhandledExceptionInspection */
-            $this->mergeConfigFrom(__DIR__."/../config/{$file}", ResponseBuilder::CONF_CONFIG);
+            $this->mergeConfigFrom(__DIR__.('/../config/'.$file), ResponseBuilder::CONF_CONFIG);
         }
     }
 
@@ -68,7 +68,7 @@ class ResponseBuilderServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/lang', 'response-builder');
 
         foreach ($this->config_files as $file) {
-            $this->publishes([__DIR__."/../config/{$file}" => config_path($file)]);
+            $this->publishes([__DIR__.('/../config/'.$file) => config_path($file)]);
         }
     }
 

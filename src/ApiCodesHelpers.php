@@ -83,6 +83,7 @@ trait ApiCodesHelpers
         if ($user_map === null) {
             throw new Ex\MissingConfigurationKeyException(RB::CONF_KEY_MAP);
         }
+
         Validator::assertIsArray(RB::CONF_KEY_MAP, $user_map);
 
         /** @var array $user_map */
