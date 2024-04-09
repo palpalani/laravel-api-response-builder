@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
@@ -9,11 +10,12 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 /**
  * BaseApiCodes handling class
@@ -42,30 +44,35 @@ class BaseApiCodes
      * @var int
      */
     protected const OK_OFFSET = 0;
+
     /**
      * built-in code for fallback message mapping
      *
      * @var int
      */
     protected const NO_ERROR_MESSAGE_OFFSET = 1;
+
     /**
      * built-in error code for HTTP_NOT_FOUND exception
      *
      * @var int
      */
     protected const EX_HTTP_NOT_FOUND_OFFSET = 10;
+
     /**
      * built-in error code for HTTP_SERVICE_UNAVAILABLE exception
      *
      * @var int
      */
     protected const EX_HTTP_SERVICE_UNAVAILABLE_OFFSET = 11;
+
     /**
      * built-in error code for HTTP_EXCEPTION
      *
      * @var int
      */
     protected const EX_HTTP_EXCEPTION_OFFSET = 12;
+
     /**
      * built-in error code for UNCAUGHT_EXCEPTION
      *
@@ -87,150 +94,149 @@ class BaseApiCodes
      */
     protected const EX_VALIDATION_EXCEPTION_OFFSET = 15;
 
-	/**
-	 * Returns base code mapping array
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpUnhandledExceptionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns base code mapping array
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpUnhandledExceptionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     protected static function getBaseMap(): array
     {
         $tpl = 'response-builder::builder.http_%d';
 
         return [
-            self::OK()                          => 'response-builder::builder.ok',
-            self::NO_ERROR_MESSAGE()            => 'response-builder::builder.no_error_message',
-            self::EX_HTTP_EXCEPTION()           => 'response-builder::builder.http_exception',
-            self::EX_UNCAUGHT_EXCEPTION()       => 'response-builder::builder.uncaught_exception',
-            self::EX_HTTP_NOT_FOUND()           => sprintf($tpl, HttpResponse::HTTP_NOT_FOUND),
+            self::OK() => 'response-builder::builder.ok',
+            self::NO_ERROR_MESSAGE() => 'response-builder::builder.no_error_message',
+            self::EX_HTTP_EXCEPTION() => 'response-builder::builder.http_exception',
+            self::EX_UNCAUGHT_EXCEPTION() => 'response-builder::builder.uncaught_exception',
+            self::EX_HTTP_NOT_FOUND() => sprintf($tpl, HttpResponse::HTTP_NOT_FOUND),
             self::EX_HTTP_SERVICE_UNAVAILABLE() => sprintf($tpl, HttpResponse::HTTP_SERVICE_UNAVAILABLE),
             self::EX_AUTHENTICATION_EXCEPTION() => sprintf($tpl, HttpResponse::HTTP_UNAUTHORIZED),
-            self::EX_VALIDATION_EXCEPTION()     => sprintf($tpl, HttpResponse::HTTP_UNPROCESSABLE_ENTITY),
+            self::EX_VALIDATION_EXCEPTION() => sprintf($tpl, HttpResponse::HTTP_UNPROCESSABLE_ENTITY),
         ];
     }
 
-	/**
-	 * Returns API code for internal code OK. Returns valid API code in current range.
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code OK. Returns valid API code in current range.
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function OK(): int
     {
         return static::getCodeForInternalOffset(static::OK_OFFSET);
     }
 
-	/**
+    /**
      * Returns API code for internal code NO_ERROR_MESSAGE.
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function NO_ERROR_MESSAGE(): int
     {
         return static::getCodeForInternalOffset(static::NO_ERROR_MESSAGE_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_HTTP_NOT_FOUND.
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_HTTP_NOT_FOUND.
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_HTTP_NOT_FOUND(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_NOT_FOUND_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_HTTP_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_HTTP_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_HTTP_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_UNCAUGHT_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_UNCAUGHT_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_UNCAUGHT_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_AUTHENTICATION_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_AUTHENTICATION_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_AUTHENTICATION_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_VALIDATION_EXCEPTION
-	 *
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_VALIDATION_EXCEPTION
+     *
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_VALIDATION_EXCEPTION(): int
     {
         return static::getCodeForInternalOffset(static::EX_VALIDATION_EXCEPTION_OFFSET);
     }
 
-	/**
-	 * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
-	 *
-	 * @throws Ex\MissingConfigurationKeyException
-	 * @throws Ex\InvalidTypeException
-	 * @throws Ex\NotIntegerException
-	 *
-	 * @noinspection PhpMethodNamingConventionInspection
-	 * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-	 */
+    /**
+     * Returns API code for internal code EX_HTTP_SERVICE_UNAVAILABLE
+     *
+     * @throws Ex\MissingConfigurationKeyException
+     * @throws Ex\InvalidTypeException
+     * @throws Ex\NotIntegerException
+     *
+     * @noinspection PhpMethodNamingConventionInspection
+     * phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+     */
     public static function EX_HTTP_SERVICE_UNAVAILABLE(): int
     {
         return static::getCodeForInternalOffset(static::EX_HTTP_SERVICE_UNAVAILABLE_OFFSET);
     }
-
 } // end of class

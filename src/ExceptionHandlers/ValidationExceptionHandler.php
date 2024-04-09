@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
@@ -9,6 +10,7 @@ namespace MarcinOrlowski\ResponseBuilder\ExceptionHandlers;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -23,9 +25,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 final class ValidationExceptionHandler implements ExceptionHandlerContract
 {
     /**
-     * @param array      $user_config
-     * @param \Throwable $ex
-     *
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\InvalidTypeException
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\MissingConfigurationKeyException
      * @throws \MarcinOrlowski\ResponseBuilder\Exceptions\NotIntegerException
@@ -36,9 +35,8 @@ final class ValidationExceptionHandler implements ExceptionHandlerContract
     {
         /** @noinspection PhpUnhandledExceptionInspection */
         return [
-            RB::KEY_API_CODE  => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+            RB::KEY_API_CODE => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
             RB::KEY_HTTP_CODE => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
         ];
     }
-
 } // end of class

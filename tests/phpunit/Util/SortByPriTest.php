@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
@@ -9,12 +10,13 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\Util;
-use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 use MarcinOrlowski\PhpunitExtraAsserts\Generator;
+use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use MarcinOrlowski\ResponseBuilder\Util;
 
 /**
  * Class SortByPriTest
@@ -32,10 +34,10 @@ class SortByPriTest extends TestCase
         $key4 = Generator::getRandomString('key_4');
 
         $data = [
-            $key1 => ['pri' => -1,],
-            $key2 => ['pri' => +5,],
-            $key3 => ['pri' => 0,],
-            $key4 => ['pri' => +2,],
+            $key1 => ['pri' => -1],
+            $key2 => ['pri' => +5],
+            $key3 => ['pri' => 0],
+            $key4 => ['pri' => +2],
         ];
 
         Util::sortArrayByPri($data);

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @noinspection PhpUnhandledExceptionInspection
@@ -12,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Util;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -41,7 +43,7 @@ class MergeConfigTest extends TestCase
                     ],
                     200 => 'o2k2_200_val',
                 ],
-                500     => 'os2_500_val',
+                500 => 'os2_500_val',
             ],
         ];
 
@@ -54,7 +56,7 @@ class MergeConfigTest extends TestCase
                     ],
                     200 => 'm_o2k2_200_val',
                 ],
-                500     => 'm_os2_500_val',
+                500 => 'm_os2_500_val',
             ],
         ];
 
@@ -64,12 +66,12 @@ class MergeConfigTest extends TestCase
                 'o2_k1' => 'o2_val',
                 'o2_k2' => [
                     100 => [
-                        'o2k2_100_k1'   => 'o2k2_100_val',
+                        'o2k2_100_k1' => 'o2k2_100_val',
                         'm_o2k2_100_k1' => 'm_o2k2_100_val',
                     ],
                     200 => 'm_o2k2_200_val',
                 ],
-                500     => 'm_os2_500_val',
+                500 => 'm_os2_500_val',
             ],
         ];
 

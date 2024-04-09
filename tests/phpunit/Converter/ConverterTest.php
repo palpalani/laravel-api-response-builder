@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -44,7 +45,7 @@ class ConverterTest extends TestCase
         $this->expectException(Ex\InvalidConfigurationException::class);
 
         // WHEN attempt to instantiate Converter class
-        new Converter();
+        new Converter;
     }
 
     /**
@@ -64,20 +65,19 @@ class ConverterTest extends TestCase
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
             \get_class($parent) => [
                 RB::KEY_HANDLER => ToArrayConverter::class,
-                RB::KEY_KEY     => $key,
+                RB::KEY_KEY => $key,
             ],
         ]);
 
         // WHEN we try to pass of child class
-        $result = (new Converter())->convert($child);
+        $result = (new Converter)->convert($child);
 
         // EXPECT it to be converted as per parent class configuration entry
         ExtraAsserts::assertIsArray($result);
         /** @var array $result */
         $this->assertArrayHasKey($key, $result);
-        $result = $result[ $key ];
+        $result = $result[$key];
         $this->assertCount(1, $result);
-        $this->assertEquals($child_val, $result[ TestModel::FIELD_NAME ]);
+        $this->assertEquals($child_val, $result[TestModel::FIELD_NAME]);
     }
-
 } // end of class

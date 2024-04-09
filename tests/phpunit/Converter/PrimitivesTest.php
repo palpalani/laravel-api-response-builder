@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -30,7 +31,6 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class PrimitivesTest extends TestCase
 {
-
     /**
      * Checks how we convert directly passed object
      */
@@ -44,19 +44,19 @@ class PrimitivesTest extends TestCase
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
             \get_class($model) => [
                 RB::KEY_HANDLER => ToArrayConverter::class,
-                RB::KEY_KEY     => $key,
+                RB::KEY_KEY => $key,
             ],
         ]);
 
         // WHEN this object is returned
         /** @var array $converted */
-        $converted = (new Converter())->convert($model);
+        $converted = (new Converter)->convert($model);
 
         // THEN we expect returned data to be converted and use KEY_KEY element.
         $this->assertIsArray($converted);
         $this->assertArrayHasKey($key, $converted);
-        $this->assertCount(1, $converted[ $key ]);
-        $this->assertEquals($model_val, $converted[ $key ][ TestModel::FIELD_NAME ]);
+        $this->assertCount(1, $converted[$key]);
+        $this->assertEquals($model_val, $converted[$key][TestModel::FIELD_NAME]);
     }
 
     /**
@@ -75,7 +75,7 @@ class PrimitivesTest extends TestCase
     public function testDirectDouble(): void
     {
         // GIVEN primitive value
-        $value = ((double)\random_int(0, 100000) / \random_int(1, 1000)) + 0.1;
+        $value = ((float) \random_int(0, 100000) / \random_int(1, 1000)) + 0.1;
         $this->doDirectPrimitiveTest($value);
     }
 
@@ -107,7 +107,7 @@ class PrimitivesTest extends TestCase
         // GIVEN primitive value $value
 
         // WHEN passing it as direct payaload
-        $converter = new Converter();
+        $converter = new Converter;
         /** @var array $converted */
         $converted = $converter->convert($value);
 
@@ -119,9 +119,8 @@ class PrimitivesTest extends TestCase
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
         /** @var string $key */
-        $key = $cfg[ RB::KEY_KEY ];
+        $key = $cfg[RB::KEY_KEY];
         $this->assertArrayHasKey($key, $converted);
-        $this->assertEquals($value, $converted[ $key ]);
+        $this->assertEquals($value, $converted[$key]);
     }
-
 } // end of class

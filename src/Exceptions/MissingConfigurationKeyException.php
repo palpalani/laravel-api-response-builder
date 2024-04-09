@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Exceptions;
@@ -9,17 +10,18 @@ namespace MarcinOrlowski\ResponseBuilder\Exceptions;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 final class MissingConfigurationKeyException extends ConfigurationException
 {
-	/**
-	 * MissingConfigurationKeyException constructor.
-	 *
-	 * @param string $var_name
-	 */
-	public function __construct($var_name)
-	{
-		parent::__construct(sprintf('Missing "%s" key.', $var_name));
-	}
+    /**
+     * MissingConfigurationKeyException constructor.
+     *
+     * @param  string  $var_name
+     */
+    public function __construct($var_name)
+    {
+        parent::__construct(sprintf('Missing "%s" key.', $var_name));
+    }
 }

@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -70,7 +71,6 @@ class MakeTest extends TestCase
         $matches = [];
         $this->assertNotEquals(0, preg_match('/^.*"test":"(.*)".*$/', $this->getResponseContent($resp), $matches));
         $result_defaults = $matches[1];
-
 
         // check if it returns the same when defaults enforced explicitly
         $resp = $this->callMakeMethod(true, BaseApiCodes::OK(), BaseApiCodes::OK(), $data,
@@ -140,5 +140,4 @@ class MakeTest extends TestCase
         $this->assertNotNull($data);
         $this->assertEmpty($data);
     }
-
 } // end of class

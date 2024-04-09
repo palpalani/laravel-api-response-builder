@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -46,7 +47,7 @@ class AutoConversionTest extends TestCase
         $cfg = [
             $model_class_name => [
                 RB::KEY_HANDLER => ToArrayConverter::class,
-                RB::KEY_KEY     => $key,
+                RB::KEY_KEY => $key,
             ],
         ];
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
@@ -61,7 +62,7 @@ class AutoConversionTest extends TestCase
         $this->assertIsArray($data);
         /** @var array $data */
         $this->assertArrayHasKey($key, $data);
-        $this->assertEquals($model_val, $data[ $key ]['val']);
+        $this->assertEquals($model_val, $data[$key]['val']);
     }
 
     /**
@@ -84,7 +85,7 @@ class AutoConversionTest extends TestCase
         $model_class_name = \get_class($model_1);
         $converter = [
             $model_class_name => [
-                RB::KEY_KEY     => 'should-not-be-used',
+                RB::KEY_KEY => 'should-not-be-used',
                 RB::KEY_HANDLER => ToArrayConverter::class,
             ],
         ];
@@ -93,13 +94,13 @@ class AutoConversionTest extends TestCase
         // AND having the object as part of bigger data set
         $tmp_base = [];
         for ($i = 0; $i < 1; $i++) {
-            $tmp_base[ Generator::getRandomString("key{$i}") ] = Generator::getRandomString("val{$i}");
+            $tmp_base[Generator::getRandomString("key{$i}")] = Generator::getRandomString("val{$i}");
         }
 
         $data = $tmp_base;
-        $data[ $model_1_data_key ] = $model_1;
+        $data[$model_1_data_key] = $model_1;
         $data['nested'] = [];
-        $data['nested'][ $model_2_data_key ] = $model_2;
+        $data['nested'][$model_2_data_key] = $model_2;
 
         // WHEN this object is returned
         $this->response = RB::success($data);
@@ -113,22 +114,22 @@ class AutoConversionTest extends TestCase
 
         // single key item must not be used
         /** @noinspection OffsetOperationsInspection */
-        $this->assertArrayNotHasKey($converter[ $model_class_name ]['key'], $data,
+        $this->assertArrayNotHasKey($converter[$model_class_name]['key'], $data,
             'Single item key found but should not');
         // instead original key must be preserved
         $this->assertArrayHasKey($model_1_data_key, $data,
             "Unable to find '{$model_1_data_key}' model 1 key'");
-        $this->assertEquals($model_1_val, $data[ $model_1_data_key ]['val']);
+        $this->assertEquals($model_1_val, $data[$model_1_data_key]['val']);
 
         $this->assertArrayHasKey('nested', $data);
         $this->assertArrayHasKey($model_2_data_key, $data['nested'],
             "Unable to find '{$model_2_data_key}' model 2 key'");
-        $this->assertEquals($model_2_val, $data['nested'][ $model_2_data_key ]['val']);
+        $this->assertEquals($model_2_val, $data['nested'][$model_2_data_key]['val']);
 
         // and all other elements of data set should also be here
         foreach ($tmp_base as $key => $val) {
             $this->assertArrayHasKey($key, $data);
-            $this->assertEquals($val, $data[ $key ]);
+            $this->assertEquals($val, $data[$key]);
         }
     }
 
@@ -146,30 +147,27 @@ class AutoConversionTest extends TestCase
         $this->assertNotNull($data);
         $this->assertIsArray($data);
         /** @var array $data */
-
-        $converter = new Converter();
+        $converter = new Converter;
         $cfg = Lockpick::call($converter, 'getPrimitiveMappingConfigOrThrow', [\gettype($value)]);
         $this->assertIsArray($cfg);
         $this->assertNotEmpty($cfg);
         /** @var array $cfg */
-        $key = $cfg[ RB::KEY_KEY ];
+        $key = $cfg[RB::KEY_KEY];
         $this->assertArrayHasKey($key, $data);
-        $this->assertEquals($value, $data[ $key ]);
+        $this->assertEquals($value, $data[$key]);
     }
 
     public static function successWithPrimitiveProvider(): array
     {
         return [
             // boolean
-            [(bool)\random_int(0, 1)],
+            [(bool) \random_int(0, 1)],
             // integer
             [random_int(0, 10000)],
             // double
-            [((double)random_int(0, 10000)) / random_int(1, 100)],
+            [((float) random_int(0, 10000)) / random_int(1, 100)],
             // string
             [Generator::getRandomString()],
         ];
     }
-
 } // end of class
-

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @noinspection PhpDocMissingThrowsInspection
@@ -13,16 +14,17 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
 use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\PhpunitExtraAsserts\ExtraAsserts;
+use MarcinOrlowski\PhpunitExtraAsserts\Generator;
 use MarcinOrlowski\ResponseBuilder\BaseApiCodes;
 use MarcinOrlowski\ResponseBuilder\ResponseBuilder as RB;
-use MarcinOrlowski\ResponseBuilder\Type;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
-use MarcinOrlowski\PhpunitExtraAsserts\Generator;
+use MarcinOrlowski\ResponseBuilder\Type;
 
 /**
  * Class SuccessTest
@@ -54,22 +56,21 @@ class SuccessTest extends TestCase
         $api = $this->getResponseSuccessObject(BaseApiCodes::OK());
 
         $this->assertNotNull($api->getData());
-        $data = (array)$api->getData();
+        $data = (array) $api->getData();
 
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_PRIMITIVES);
         $this->assertNotEmpty($cfg);
         $this->assertIsArray($cfg);
         /** @var array $cfg */
-        $key = $cfg[ Type::ARRAY ][ RB::KEY_KEY ];
+        $key = $cfg[Type::ARRAY][RB::KEY_KEY];
 
         $this->assertCount(1, $data);
         /** @var array $data */
         $data = $api->getData();
-        ExtraAsserts::assertArrayEquals($payload, (array)$data[ $key ]);
+        ExtraAsserts::assertArrayEquals($payload, (array) $data[$key]);
 
         $msg_key = BaseApiCodes::getCodeMessageKey(BaseApiCodes::OK());
         /** @var string $msg_key */
         $this->assertEquals($this->langGet($msg_key), $api->getMessage());
     }
-
 } // end of class

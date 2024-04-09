@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Localization;
@@ -9,10 +10,10 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Localization;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use Illuminate\Support\Facades\Config;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
 
 /**
@@ -37,15 +38,15 @@ class TranslationTest extends TestCase
 
         // get list of all other directories in library's lang folder.
         /** @var array $entries */
-        $entries = glob(__DIR__ . '/../../../src/lang/*', GLOB_ONLYDIR);
+        $entries = glob(__DIR__.'/../../../src/lang/*', GLOB_ONLYDIR);
         $supported_languages =
             array_filter(
                 array_filter(
-                    array_map(static function($entry) {
+                    array_map(static function ($entry) {
                         return basename($entry);
                     }, $entries)
                 ),
-                static function($item) use ($default_lang) {
+                static function ($item) use ($default_lang) {
                     return $item !== $default_lang;
                 }
             );
@@ -63,14 +64,13 @@ class TranslationTest extends TestCase
             foreach ($base_translations as $key => $val) {
                 $msg = "Missing localization entry '{$key}' in '{$lang}' language file.";
                 $this->assertArrayHasKey($key, $translation, $msg);
-                unset($translation[ $key ]);
+                unset($translation[$key]);
             }
             // ensure we have no dangling translation entries left that
             // are no longer present in base translation.
             $sep = "\n   ";
-            $msg = "Unwanted entries in '{$lang}' language file:{$sep}" . implode($sep, array_keys($translation));
+            $msg = "Unwanted entries in '{$lang}' language file:{$sep}".implode($sep, array_keys($translation));
             $this->assertEmpty($translation, $msg);
         }
     }
-
 } // end of class

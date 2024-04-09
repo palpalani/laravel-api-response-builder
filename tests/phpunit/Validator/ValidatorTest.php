@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Validator;
@@ -9,13 +10,14 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Validator;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
-use MarcinOrlowski\ResponseBuilder\Type;
-use MarcinOrlowski\ResponseBuilder\Validator;
 use MarcinOrlowski\ResponseBuilder\Exceptions as Ex;
 use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
+use MarcinOrlowski\ResponseBuilder\Type;
+use MarcinOrlowski\ResponseBuilder\Validator;
 
 /**
  * Class ValidatorTest
@@ -37,7 +39,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsIntWrongType(): void
     {
-	    $this->expectException(Ex\NotIntegerException::class);
+        $this->expectException(Ex\NotIntegerException::class);
         Validator::assertIsInt(__FUNCTION__, 'chicken');
     }
 
@@ -48,7 +50,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsObjectCorrectType(): void
     {
-        $obj = new \stdClass();
+        $obj = new \stdClass;
         Validator::assertIsObject(__FUNCTION__, $obj);
         // This assert won't be called if exception is thrown
         $this->assertTrue(true);
@@ -59,7 +61,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsObjectWrongType(): void
     {
-	    $this->expectException(Ex\NotObjectException::class);
+        $this->expectException(Ex\NotObjectException::class);
         Validator::assertIsObject(__FUNCTION__, 'chicken');
     }
 
@@ -80,7 +82,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsArrayWithInvalidData(): void
     {
-	    $this->expectException(Ex\NotArrayException::class);
+        $this->expectException(Ex\NotArrayException::class);
         Validator::assertIsArray(__FUNCTION__, false);
     }
 
@@ -101,7 +103,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertIsStringWrongType(): void
     {
-	    $this->expectException(Ex\NotStringException::class);
+        $this->expectException(Ex\NotStringException::class);
         Validator::assertIsString(__FUNCTION__, 666);
     }
 
@@ -176,7 +178,7 @@ class ValidatorTest extends TestCase
     public function testAssertInstanceOfInvalidClass(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $obj = new \stdClass();
+        $obj = new \stdClass;
         Validator::assertInstanceOf('obj', $obj, \JsonSerializable::class);
     }
 
@@ -185,7 +187,7 @@ class ValidatorTest extends TestCase
      */
     public function testAssertInstanceOfValidClass(): void
     {
-        $obj = new \stdClass();
+        $obj = new \stdClass;
         Validator::assertInstanceOf('obj', $obj, \stdClass::class);
         // This assert won't be called if exception is thrown
         $this->assertTrue(true);
@@ -206,35 +208,35 @@ class ValidatorTest extends TestCase
          */
         $test_data = [
             [
-                'item'     => false,
-                'types'    => [Type::STRING],
+                'item' => false,
+                'types' => [Type::STRING],
                 'expected' => false,
             ],
             [
-	            'item'     => false,
-	            'types'    => [Type::BOOLEAN],
-	            'expected' => true,
-            ],
-            [
-                'item'     => 'foo',
-                'types'    => [Type::STRING],
+                'item' => false,
+                'types' => [Type::BOOLEAN],
                 'expected' => true,
             ],
             [
-                'item'     => 23,
-                'types'    => [Type::STRING],
+                'item' => 'foo',
+                'types' => [Type::STRING],
+                'expected' => true,
+            ],
+            [
+                'item' => 23,
+                'types' => [Type::STRING],
                 'expected' => false,
             ],
             [
-                'item'     => 666,
-                'types'    => [Type::INTEGER],
+                'item' => 666,
+                'types' => [Type::INTEGER],
                 'expected' => true,
             ],
             [
-	            'item'     => 'fail',
-	            'types'    => [Type::INTEGER,
-                               Type::BOOLEAN],
-	            'expected' => false,
+                'item' => 'fail',
+                'types' => [Type::INTEGER,
+                    Type::BOOLEAN],
+                'expected' => false,
             ],
 
         ];
@@ -254,5 +256,4 @@ class ValidatorTest extends TestCase
             $this->assertEquals($test_passed, $data['expected'], $msg);
         }
     }
-
 } // end of class

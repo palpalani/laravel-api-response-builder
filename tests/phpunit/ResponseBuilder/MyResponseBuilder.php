@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * @noinspection PhpDocMissingThrowsInspection
@@ -13,6 +14,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
@@ -23,14 +25,13 @@ class MyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
      * @noinspection PhpMissingParentCallCommonInspection
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassAfterLastUsed
      */
-    protected function buildResponse(bool       $success,
-                                     int        $api_code,
-                                     int|string $msg_or_api_code,
-                                     ?array     $placeholders = null,
-                                     mixed      $data = null,
-                                     ?array     $debug_data = null): array
+    protected function buildResponse(bool $success,
+        int $api_code,
+        int|string $msg_or_api_code,
+        ?array $placeholders = null,
+        mixed $data = null,
+        ?array $debug_data = null): array
     {
         return static::$fake_response;
     }
-
 } // end of class

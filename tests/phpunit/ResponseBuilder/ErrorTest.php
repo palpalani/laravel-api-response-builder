@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -24,9 +25,9 @@ use MarcinOrlowski\ResponseBuilder\Tests\TestCase;
  */
 class ErrorTest extends TestCase
 {
-	/**
-	 * Check success()
-	 */
+    /**
+     * Check success()
+     */
     public function testError(): void
     {
         // GIVEN random error code
@@ -42,5 +43,4 @@ class ErrorTest extends TestCase
         // AND no data
         $this->assertNull($api->getData());
     }
-
 } // end of class

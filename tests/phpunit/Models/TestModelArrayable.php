@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
@@ -9,6 +10,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2023 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -20,43 +22,40 @@ use Illuminate\Support\Facades\Request;
  */
 class TestModelArrayable implements Arrayable
 {
-	/** @var string Name of $val attribute, referenced by tests to avoid hardcoding */
-	public const FIELD_NAME = 'val';
+    /** @var string Name of attribute, referenced by tests to avoid hardcoding */
+    public const FIELD_NAME = 'val';
 
-	/** @var string|null */
-	protected $val;
+    /** @var string|null */
+    protected $val;
 
-	/**
-	 * TestModel constructor.
-	 *
-	 * @param string $val
-	 */
-	public function __construct(string $val)
-	{
-		$this->val = $val;
-	}
+    /**
+     * TestModel constructor.
+     */
+    public function __construct(string $val)
+    {
+        $this->val = $val;
+    }
 
-	public function getVal(): ?string
-	{
-		return $this->val;
-	}
+    public function getVal(): ?string
+    {
+        return $this->val;
+    }
 
-	/**
-	 * Converts model to array.
-	 *
-	 * @param Request $request
-	 *
-	 * @noinspection PhpUnusedParameterInspection
-	 *
-	 * NOTE: No typehint as signature must match JsonResource::toArray()
-	 * @noinspection PhpMissingParamTypeInspection
-	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface
-	 */
-	public function toArray($request = null): array
-	{
-		return [
-			self::FIELD_NAME => $this->val,
-		];
-	}
-
+    /**
+     * Converts model to array.
+     *
+     * @param  Request  $request
+     *
+     * @noinspection PhpUnusedParameterInspection
+     *
+     * NOTE: No typehint as signature must match JsonResource::toArray()
+     * @noinspection PhpMissingParamTypeInspection
+     * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundInImplementedInterface
+     */
+    public function toArray($request = null): array
+    {
+        return [
+            self::FIELD_NAME => $this->val,
+        ];
+    }
 } // end of class
