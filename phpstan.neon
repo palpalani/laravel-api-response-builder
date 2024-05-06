@@ -3,14 +3,14 @@
 # Laravel API Response Builder PHPStan config file
 #
 # @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
-# @copyright 2016-2023 Marcin Orlowski
+# @copyright 2016-2024 Marcin Orlowski
 # @license   http://www.opensource.org/licenses/mit-license.php MIT
 # @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
 #
 ##################################################################################
 
 includes:
-  - vendor/nunomaduro/larastan/extension.neon
+  - vendor/larastan/larastan/extension.neon
 parameters:
   checkGenericClassInNonGenericObjectType: false
   level: max
