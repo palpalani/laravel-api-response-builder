@@ -277,6 +277,7 @@ class ResponseBuilder extends ResponseBuilderBase
                 $msg_or_api_code, $this->data, $http_code,
                 $this->placeholders, $http_headers, $this->json_opts);
         }
+
         $http_code = $this->http_code ?? RB::DEFAULT_HTTP_CODE_ERROR;
         Validator::assertErrorHttpCode($http_code);
 

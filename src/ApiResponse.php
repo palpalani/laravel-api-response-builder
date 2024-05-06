@@ -37,7 +37,7 @@ class ApiResponse
         ];
         foreach ($keys as $key => $allowed_types) {
             if (! \array_key_exists($key, $decoded_json)) {
-                throw new \InvalidArgumentException(sprintf('Missing key \'%s\' in JSON response.', $key));
+                throw new \InvalidArgumentException(sprintf("Missing key '%s' in JSON response.", $key));
             }
 
             /** @var mixed|null $allowed_types */
@@ -51,13 +51,13 @@ class ApiResponse
         $key = ResponseBuilder::KEY_LOCALE;
         if (empty($decoded_json[$key])) {
             throw new \InvalidArgumentException(
-                sprintf('The \'%s\' in JSON response cannot be empty.', $key));
+                sprintf("The '%s' in JSON response cannot be empty.", $key));
         }
 
         $key = ResponseBuilder::KEY_MESSAGE;
         if (\is_null($decoded_json[$key])) {
             throw new \InvalidArgumentException(
-                sprintf('The \'%s\' in JSON response cannot be NULL.', $key));
+                sprintf("The '%s' in JSON response cannot be NULL.", $key));
         }
 
         $api = (new self)
