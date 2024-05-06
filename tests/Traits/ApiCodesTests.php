@@ -12,6 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -49,13 +50,13 @@ trait ApiCodesTests
     protected function getConstantsThatAreNowMethods(): array
     {
         return ['OK_OFFSET',
-                'NO_ERROR_MESSAGE_OFFSET',
-                'EX_HTTP_NOT_FOUND_OFFSET',
-                'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
-                'EX_HTTP_EXCEPTION_OFFSET',
-                'EX_UNCAUGHT_EXCEPTION_OFFSET',
-                'EX_AUTHENTICATION_EXCEPTION_OFFSET',
-                'EX_VALIDATION_EXCEPTION_OFFSET',
+            'NO_ERROR_MESSAGE_OFFSET',
+            'EX_HTTP_NOT_FOUND_OFFSET',
+            'EX_HTTP_SERVICE_UNAVAILABLE_OFFSET',
+            'EX_HTTP_EXCEPTION_OFFSET',
+            'EX_UNCAUGHT_EXCEPTION_OFFSET',
+            'EX_AUTHENTICATION_EXCEPTION_OFFSET',
+            'EX_VALIDATION_EXCEPTION_OFFSET',
         ];
     }
 
@@ -110,6 +111,7 @@ trait ApiCodesTests
             /** @var string $name */
             if (\in_array($name, $const_to_ignore, true)) {
                 $this->assertTrue(true);
+
                 continue;
             }
 
@@ -139,6 +141,7 @@ trait ApiCodesTests
             /** @var string $name */
             if (\in_array($name, $const_to_ignore, true)) {
                 $this->assertTrue(true);
+
                 continue;
             }
 
@@ -253,7 +256,7 @@ trait ApiCodesTests
                         $this->assertIsNumeric($cfg_val);
                         break;
 
-                    // phpcs:disable Squiz.ControlStructures.SwitchDeclaration.DefaultNoBreak
+                        // phpcs:disable Squiz.ControlStructures.SwitchDeclaration.DefaultNoBreak
                     default:
                         $this->fail("Unknown key '{$cfg_key}' in '{$class_name}' data conversion config.");
                 }
@@ -272,5 +275,4 @@ trait ApiCodesTests
             }
         }
     }
-
 } // end of trait

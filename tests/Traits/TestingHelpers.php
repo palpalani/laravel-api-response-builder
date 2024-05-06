@@ -12,6 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Traits;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -71,7 +72,7 @@ trait TestingHelpers
         // Obtain configuration params
         $class_name = $this->getApiCodesClassName();
 
-        $obj = new $class_name();
+        $obj = new $class_name;
         /** @var int $min */
         $min = Lockpick::call($obj, 'getMinCode');
         $this->min_allowed_code = $min;
@@ -84,15 +85,15 @@ trait TestingHelpers
         $this->random_api_code = \mt_rand($this->min_allowed_code, $this->max_allowed_code);
 
         // AND corresponding mapped message mapping
-        $map = Lockpick::call(new BaseApiCodes(), 'getBaseMap');
+        $map = Lockpick::call(new BaseApiCodes, 'getBaseMap');
         /** @var array $map */
         if (empty($map)) {
             throw new \RuntimeException('getBaseMap() returned empty value.');
         }
         $idx = \random_int(1, \count($map));
-        $this->random_api_code_message_key = $map[ \array_keys($map)[ $idx - 1 ] ];
+        $this->random_api_code_message_key = $map[\array_keys($map)[$idx - 1]];
         $this->random_api_code_message = $this->langGet($this->random_api_code_message_key,
-            ['api_code' => $this->random_api_code,]);
+            ['api_code' => $this->random_api_code]);
 
         $this->error_message_map = [
             $this->random_api_code => $this->random_api_code_message_key,
@@ -111,6 +112,7 @@ trait TestingHelpers
         if ($content === false) {
             throw new \LogicException('Response does not contains any content.');
         }
+
         return $content;
     }
 
@@ -122,8 +124,8 @@ trait TestingHelpers
      * do not want to happen, not handle separately after each invocation, so this wrapper deals with it for
      * us.
      *
-     * @param string     $key     String key as passed to Lang::get()
-     * @param array|null $replace Optional replacement array as passed to Lang::get()
+     * @param  string  $key  String key as passed to Lang::get()
+     * @param  array|null  $replace  Optional replacement array as passed to Lang::get()
      */
     public function langGet(string $key, ?array $replace = null): string
     {
@@ -132,6 +134,7 @@ trait TestingHelpers
         if (is_array($result)) {
             $result = implode('', $result);
         }
+
         return $result;
     }
 
@@ -144,17 +147,17 @@ trait TestingHelpers
      *
      * NOTE: content of `data` node is NOT checked here!
      *
-     * @param int|null    $expected_api_code_offset expected api code offset or @null for default value
-     * @param int|null    $expected_http_code       HTTP return code to check against or @null for default
-     * @param string|null $expected_message         Expected value of 'message' or @null for default message
+     * @param  int|null  $expected_api_code_offset  expected api code offset or @null for default value
+     * @param  int|null  $expected_http_code  HTTP return code to check against or @null for default
+     * @param  string|null  $expected_message  Expected value of 'message' or @null for default message
      *
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\MissingConfigurationKeyException
      * @throws \ReflectionException
      */
-    public function getResponseSuccessObject(?int    $expected_api_code_offset = null,
-                                             int     $expected_http_code = null,
-                                             ?string $expected_message = null): ApiResponse
+    public function getResponseSuccessObject(?int $expected_api_code_offset = null,
+        ?int $expected_http_code = null,
+        ?string $expected_message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes */
@@ -187,18 +190,18 @@ trait TestingHelpers
      * Retrieves and validates response as expected from errorXXX() methods. Returns response
      * object built from JSON.
      *
-     * @param int|null    $expected_api_code_offset expected Api response code offset or @null for default
+     * @param  int|null  $expected_api_code_offset  expected Api response code offset or @null for default
      *                                              value
-     * @param int         $expected_http_code       Expected HTTP code
-     * @param string|null $message                  Expected return message or @null if we automatically
-     *                                              mapped message fits
+     * @param  int  $expected_http_code  Expected HTTP code
+     * @param  string|null  $message  Expected return message or @null if we automatically
+     *                                mapped message fits
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\IncompatibleTypeException
      */
-    public function getResponseErrorObject(?int    $expected_api_code_offset = null,
-                                           int     $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
-                                           ?string $message = null): ApiResponse
+    public function getResponseErrorObject(?int $expected_api_code_offset = null,
+        int $expected_http_code = RB::DEFAULT_HTTP_CODE_ERROR,
+        ?string $message = null): ApiResponse
     {
         if ($expected_api_code_offset === null) {
             /** @var BaseApiCodes $api_codes_class_name */
@@ -222,18 +225,17 @@ trait TestingHelpers
         return $api;
     }
 
-
     /**
-     * @param int         $expected_api_code  expected Api response code offset
-     * @param int         $expected_http_code expected HTTP code
-     * @param string|null $expected_message   expected message string or @null if default
+     * @param  int  $expected_api_code  expected Api response code offset
+     * @param  int  $expected_http_code  expected HTTP code
+     * @param  string|null  $expected_message  expected message string or @null if default
      *
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\MissingConfigurationKeyException
      */
-    private function getResponseObjectRaw(int     $expected_api_code,
-                                          int     $expected_http_code,
-                                          ?string $expected_message = null): ApiResponse
+    private function getResponseObjectRaw(int $expected_api_code,
+        int $expected_http_code,
+        ?string $expected_message = null): ApiResponse
     {
         $actual = $this->response->getStatusCode();
         $contents = $this->getResponseContent($this->response);
@@ -267,8 +269,8 @@ trait TestingHelpers
      * Checks if Response's code matches our expectations. If not, shows
      * \MarcinOrlowski\ResponseBuilder\ApiCodeBase::XXX constant name of expected and current values
      *
-     * @param int       $expected_code ApiCode::XXX code expected
-     * @param \StdClass $response_json response json object
+     * @param  int  $expected_code  ApiCode::XXX code expected
+     * @param  \StdClass  $response_json  response json object
      */
     public function assertResponseStatusCode(int $expected_code, \stdClass $response_json): void
     {
@@ -289,42 +291,42 @@ trait TestingHelpers
     /**
      * Calls protected method make()
      *
-     * @param boolean    $success                    @true if response should indicate success, @false
-     *                                               otherwise
-     * @param int        $api_code_offset            API code to use with produced response
-     * @param string|int $message_or_api_code_offset Resolvable Api code or message string
-     * @param array|null $data                       Data to return
-     * @param array|null $headers                    HTTP headers to include
-     * @param int|null   $encoding_options           see http://php.net/manual/en/function.json-encode.php
-     * @param array|null $debug_data                 optional data to be included in response JSON
+     * @param  bool  $success  @true if response should indicate success, @false
+     *                         otherwise
+     * @param  int  $api_code_offset  API code to use with produced response
+     * @param  string|int  $message_or_api_code_offset  Resolvable Api code or message string
+     * @param  array|null  $data  Data to return
+     * @param  array|null  $headers  HTTP headers to include
+     * @param  int|null  $encoding_options  see http://php.net/manual/en/function.json-encode.php
+     * @param  array|null  $debug_data  optional data to be included in response JSON
      *
      * @throws \ReflectionException
      * @throws Ex\MissingConfigurationKeyException
      *
      * @noinspection PhpTooManyParametersInspection
      */
-    protected function callMakeMethod(bool       $success,
-                                      int        $api_code_offset,
-                                      string|int $message_or_api_code_offset,
-                                      ?array     $data = null,
-                                      ?array     $headers = null,
-                                      ?int       $encoding_options = null,
-                                      ?array     $debug_data = null): HttpResponse
+    protected function callMakeMethod(bool $success,
+        int $api_code_offset,
+        string|int $message_or_api_code_offset,
+        ?array $data = null,
+        ?array $headers = null,
+        ?int $encoding_options = null,
+        ?array $debug_data = null): HttpResponse
     {
         $http_code = null;
         $lang_args = null;
 
         $result = Lockpick::call(
             RB::asSuccess(), 'make', [$success,
-                                      $api_code_offset,
-                                      $message_or_api_code_offset,
-                                      $data,
-                                      $http_code,
-                                      $lang_args,
-                                      $headers,
-                                      $encoding_options,
-                                      $debug_data,
-        ]);
+                $api_code_offset,
+                $message_or_api_code_offset,
+                $data,
+                $http_code,
+                $lang_args,
+                $headers,
+                $encoding_options,
+                $debug_data,
+            ]);
 
         /** @var HttpResponse $result */
         return $result;
@@ -336,8 +338,7 @@ trait TestingHelpers
      * Returns ErrorCode constant name referenced by its value. Note, will return
      * first one spotted with that value so this is pretty fragile.
      *
-     * @param int $api_code_offset value to match constant name for
-     *
+     * @param  int  $api_code_offset  value to match constant name for
      * @return int|null|string
      */
     protected function resolveConstantFromCode(int $api_code_offset)
@@ -361,8 +362,8 @@ trait TestingHelpers
     /**
      * UTF8 aware version of ord(). Returns code of the character at given string offset.
      *
-     * @param string $string UTF8 string to work on
-     * @param int    $offset start offset. Note, offset will be updated to properly skip multi-byte chars!
+     * @param  string  $string  UTF8 string to work on
+     * @param  int  $offset  start offset. Note, offset will be updated to properly skip multi-byte chars!
      *
      * $text = "abcàêß€abc";
      * $offset = 0;
@@ -372,7 +373,7 @@ trait TestingHelpers
      */
     protected function ord8(string $string, int &$offset): int
     {
-        $code = \ord($string[ $offset ]);
+        $code = \ord($string[$offset]);
         $bytes_number = 1;
         if ($code >= 128) {             //otherwise 0xxxxxxx
             if ($code < 224) {          //110xxxxx
@@ -402,7 +403,7 @@ trait TestingHelpers
     /**
      * UTF8 escape of given string
      *
-     * @param string $string UTF8 string to escape
+     * @param  string  $string  UTF8 string to escape
      */
     protected function escape8(string $string): string
     {
@@ -416,5 +417,4 @@ trait TestingHelpers
 
         return $escaped;
     }
-
 } // end of class

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
@@ -9,6 +10,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -81,6 +83,7 @@ trait ApiCodesHelpers
         if ($user_map === null) {
             throw new Ex\MissingConfigurationKeyException(RB::CONF_KEY_MAP);
         }
+
         Validator::assertIsArray(RB::CONF_KEY_MAP, $user_map);
 
         /** @var array $user_map */
@@ -90,7 +93,7 @@ trait ApiCodesHelpers
     /**
      * Returns locale mappings key for given api code or @null if there's no mapping
      *
-     * @param integer $api_code Api code to look for mapped message for.
+     * @param  int  $api_code  Api code to look for mapped message for.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
@@ -99,7 +102,7 @@ trait ApiCodesHelpers
      */
     public static function getCodeMessageKey(int $api_code): ?string
     {
-        if (!static::isCodeValid($api_code)) {
+        if (! static::isCodeValid($api_code)) {
             $min = static::getMinCode();
             $max = static::getMaxCode();
             Validator::assertIsIntRange(
@@ -108,13 +111,13 @@ trait ApiCodesHelpers
 
         $map = static::getMap();
 
-        return $map[ $api_code ] ?? null;
+        return $map[$api_code] ?? null;
     }
 
     /**
      * Checks if given API $code can be used in current configuration.
      *
-     * @param int $code API code to validate
+     * @param  int  $code  API code to validate
      *
      * @throws Ex\MissingConfigurationKeyException
      */
@@ -126,7 +129,6 @@ trait ApiCodesHelpers
     /**
      * Returns final API code for internal code, remapped to configured code range
      *
-     * @param int $internal_code
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\MissingConfigurationKeyException

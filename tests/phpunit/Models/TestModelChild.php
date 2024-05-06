@@ -12,6 +12,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Models;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 

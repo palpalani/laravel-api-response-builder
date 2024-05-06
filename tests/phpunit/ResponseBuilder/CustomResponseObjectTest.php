@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -34,7 +35,7 @@ class CustomResponseObjectTest extends TestCase
         MyResponseBuilder::$fake_response = [];
         for ($i = 0; $i < 10; $i++) {
             /** @noinspection AmbiguousMethodsCallsInArrayMappingInspection */
-            MyResponseBuilder::$fake_response[ Generator::getRandomString() ] = Generator::getRandomString();
+            MyResponseBuilder::$fake_response[Generator::getRandomString()] = Generator::getRandomString();
         }
 
         $response = MyResponseBuilder::success();
@@ -42,5 +43,4 @@ class CustomResponseObjectTest extends TestCase
         $array_b = \json_decode($this->getResponseContent($response), true);
         ExtraAsserts::assertArrayEquals(MyResponseBuilder::$fake_response, $array_b);
     }
-
 } // end of class

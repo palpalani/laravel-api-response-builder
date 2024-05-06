@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Contracts;
@@ -9,9 +10,10 @@ namespace MarcinOrlowski\ResponseBuilder\Contracts;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 interface InvalidTypeExceptionContract
 {
-	public function __construct(string $var_name, string $type, array $allowed_types);
+    public function __construct(string $var_name, string $type, array $allowed_types);
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder\Tests;
@@ -9,6 +10,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -31,8 +33,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param \Illuminate\Foundation\Application $app
-     *
+     * @param  \Illuminate\Foundation\Application  $app
      * @return void
      *
      * NOTE: not return typehint due to compatibility with TestBench's method signature.
@@ -64,8 +65,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * [Orchestra] Load service providers we need during the tests
      *
-     * @param \Illuminate\Foundation\Application $app
-     *
+     * @param  \Illuminate\Foundation\Application  $app
      * @return array<int, class-string>
      *
      * NOTE: not return typehint due to compatibility with TestBench's method signature.
@@ -81,5 +81,4 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             \MarcinOrlowski\ResponseBuilder\ResponseBuilderServiceProvider::class,
         ];
     }
-
 } // end of class

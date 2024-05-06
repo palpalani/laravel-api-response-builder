@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Converter;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -37,24 +38,24 @@ class ObjectTest extends TestCase
     public function testConvertWithEmptyKeyInConfig(): void
     {
         // custom converter with it's own response structure
-        $fake = new FakeConverter();
+        $fake = new FakeConverter;
 
         $data = collect([1, 2, 3]);
 
         /** @var array $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
-        $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
-        $cfg[ Collection::class ][ RB::KEY_KEY ] = null;
+        $cfg[Collection::class][RB::KEY_HANDLER] = FakeConverter::class;
+        $cfg[Collection::class][RB::KEY_KEY] = null;
 
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
         /** @var array $result */
-        $result = (new Converter())->convert($data);
+        $result = (new Converter)->convert($data);
 
         $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertArrayHasKey($fake->key, $result);
-        $this->assertEquals($result[ $fake->key ], $fake->val);
+        $this->assertEquals($result[$fake->key], $fake->val);
     }
 
     /**
@@ -64,7 +65,7 @@ class ObjectTest extends TestCase
     {
         Config::set(RB::CONF_KEY_CONVERTER_CLASSES, [
             Collection::class => [
-                RB::KEY_KEY     => false,
+                RB::KEY_KEY => false,
                 RB::KEY_HANDLER => FakeConverter::class,
             ],
         ]);
@@ -82,20 +83,20 @@ class ObjectTest extends TestCase
         // only string and null is allowed for RB::KEY_KEY
         $allowed_keys = [Generator::getRandomString(), null];
 
-        $fake = new FakeConverter();
+        $fake = new FakeConverter;
 
         $data = collect([1, 2, 3]);
 
         /** @var array $cfg */
         $cfg = Config::get(RB::CONF_KEY_CONVERTER_CLASSES) ?? [];
-        $cfg[ Collection::class ][ RB::KEY_HANDLER ] = FakeConverter::class;
+        $cfg[Collection::class][RB::KEY_HANDLER] = FakeConverter::class;
 
-        \collect($allowed_keys)->each(function($allowed_key) use ($data, $fake, $cfg) {
-            $cfg[ Collection::class ][ RB::KEY_KEY ] = $allowed_key;
+        \collect($allowed_keys)->each(function ($allowed_key) use ($data, $fake, $cfg) {
+            $cfg[Collection::class][RB::KEY_KEY] = $allowed_key;
 
             Config::set(RB::CONF_KEY_CONVERTER_CLASSES, $cfg);
 
-            $result = (new Converter())->convert($data);
+            $result = (new Converter)->convert($data);
 
             $this->assertIsArray($result);
             /** @var array $result */
@@ -103,13 +104,12 @@ class ObjectTest extends TestCase
 
             if (\is_string($allowed_key)) {
                 $this->assertArrayHasKey($allowed_key, $result);
-                $this->assertArrayHasKey($fake->key, $result[ $allowed_key ]);
-                $this->assertEquals($result[ $allowed_key ][ $fake->key ], $fake->val);
-            } else if (\is_null($allowed_key)) {
+                $this->assertArrayHasKey($fake->key, $result[$allowed_key]);
+                $this->assertEquals($result[$allowed_key][$fake->key], $fake->val);
+            } elseif (\is_null($allowed_key)) {
                 $this->assertArrayHasKey($fake->key, $result);
-                $this->assertEquals($result[ $fake->key ], $fake->val);
+                $this->assertEquals($result[$fake->key], $fake->val);
             }
         });
     }
-
 } // end of class

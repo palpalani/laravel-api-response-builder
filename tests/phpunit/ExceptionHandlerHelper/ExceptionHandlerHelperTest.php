@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ExceptionHandlerHelper;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -41,12 +42,12 @@ class ExceptionHandlerHelperTest extends TestCase
      */
     public function testUnauthenticated(): void
     {
-        $exception = new AuthenticationException();
+        $exception = new AuthenticationException;
 
-        $obj = new ExceptionHandlerHelper();
+        $obj = new ExceptionHandlerHelper;
         /** @var HttpResponse $eh_response */
         $eh_response = Lockpick::call($obj, 'unauthenticated', [null,
-                                                                $exception,
+            $exception,
         ]);
 
         $response = ApiResponse::fromJson($this->getResponseContent($eh_response));
@@ -63,9 +64,9 @@ class ExceptionHandlerHelperTest extends TestCase
         /** @noinspection PhpUndefinedClassInspection */
         \Config::set(RB::CONF_KEY_DEBUG_EX_TRACE_ENABLED, true);
 
-        $exception = new \RuntimeException();
+        $exception = new \RuntimeException;
 
-        $dummy_request = new \Illuminate\Http\Request();
+        $dummy_request = new \Illuminate\Http\Request;
         $content = ExceptionHandlerHelper::render($dummy_request, $exception);
         $api = ApiResponse::fromJson($this->getResponseContent($content));
         $this->assertNull($api->getData());
@@ -84,16 +85,16 @@ class ExceptionHandlerHelperTest extends TestCase
     {
         $codes = [
             [
-                'exception_class'       => ValidationException::class,
-                'expected_http_code'    => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
-                'expected_api_code'     => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
+                'exception_class' => ValidationException::class,
+                'expected_http_code' => HttpResponse::HTTP_UNPROCESSABLE_ENTITY,
+                'expected_api_code' => BaseApiCodes::EX_VALIDATION_EXCEPTION(),
                 'do_message_validation' => false,
-                'has_data'              => true,
+                'has_data' => true,
             ],
         ];
 
         foreach ($codes as $exception_type => $params) {
-            $this->doTestSingleException((string)($exception_type), $params['exception_class'],
+            $this->doTestSingleException((string) ($exception_type), $params['exception_class'],
                 $params['expected_http_code'], $params['expected_api_code'],
                 $params['do_message_validation'], $params['has_data']);
         }
@@ -102,23 +103,23 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Handles single exception testing.
      *
-     * @param string $exception_config_key           ResponseBuilder's config key for this particular
-     *                                               exception.
-     * @param string $exception_class                Name of the class of exception to be constructed.
-     * @param int    $expected_http_code             Expected response HTTP code
-     * @param int    $expected_api_code              Expected response API code
-     * @param bool   $validate_response_message_text Set to @true, to validate returned response message with
-     *                                               current localization.
-     * @param bool   $expect_data                    Set to @true if response is expected to have non null
-     *                                               `data` node.
+     * @param  string  $exception_config_key  ResponseBuilder's config key for this particular
+     *                                        exception.
+     * @param  string  $exception_class  Name of the class of exception to be constructed.
+     * @param  int  $expected_http_code  Expected response HTTP code
+     * @param  int  $expected_api_code  Expected response API code
+     * @param  bool  $validate_response_message_text  Set to @true, to validate returned response message with
+     *                                                current localization.
+     * @param  bool  $expect_data  Set to @true if response is expected to have non null
+     *                             `data` node.
      *
      * @noinspection PhpTooManyParametersInspection
      */
     protected function doTestSingleException(string $exception_config_key,
-                                             string $exception_class,
-                                             int    $expected_http_code, int $expected_api_code,
-                                             bool   $validate_response_message_text = true,
-                                             bool   $expect_data = false): void
+        string $exception_class,
+        int $expected_http_code, int $expected_api_code,
+        bool $validate_response_message_text = true,
+        bool $expect_data = false): void
     {
         $key = BaseApiCodes::getCodeMessageKey($expected_api_code);
         $expect_data_node_null = true;
@@ -141,7 +142,7 @@ class ExceptionHandlerHelperTest extends TestCase
         }
 
         // hand the exception to the handler and examine its response JSON
-        $dummy_request = new \Illuminate\Http\Request();
+        $dummy_request = new \Illuminate\Http\Request;
         /** @var \Throwable $exception */
         $eh_response = ExceptionHandlerHelper::render($dummy_request, $exception);
         $api = ApiResponse::fromJson($this->getResponseContent($eh_response));
@@ -158,8 +159,8 @@ class ExceptionHandlerHelperTest extends TestCase
         /** @var string $key */
         $error_message = $this->langGet($key, [
             'response_api_code' => $expected_api_code,
-            'message'           => $ex_message,
-            'class'             => \get_class($exception),
+            'message' => $ex_message,
+            'class' => \get_class($exception),
         ]);
 
         if ($validate_response_message_text) {
@@ -172,7 +173,7 @@ class ExceptionHandlerHelperTest extends TestCase
             $this->assertNotNull($data);
             /** @var array $data */
             $this->assertArrayHasKey(RB::KEY_MESSAGES, $data);
-            $this->assertIsArray($data[ RB::KEY_MESSAGES ]);
+            $this->assertIsArray($data[RB::KEY_MESSAGES]);
         }
     }
 
@@ -228,13 +229,13 @@ class ExceptionHandlerHelperTest extends TestCase
             $ex = new HttpException($code);
             /** @var HttpResponse $response */
             $response = Lockpick::call(ExceptionHandlerHelper::class, 'render', [
-                    null,
-                    $ex,
-                ]
+                null,
+                $ex,
+            ]
             );
 
             $api = ApiResponse::fromJson($this->getResponseContent($response));
-            $this->assertEquals($translation[ $key ], $api->getMessage(),
+            $this->assertEquals($translation[$key], $api->getMessage(),
                 "error message mismatch for http code: {$code}");
         }
     }
@@ -252,19 +253,19 @@ class ExceptionHandlerHelperTest extends TestCase
         ExtraAsserts::assertArrayHasKeys($keys, $cfg);
 
         // check http_exception block and validate all required entries and the config content.
-        $http_cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ];
+        $http_cfg = $cfg[HttpException::class][RB::KEY_CONFIG];
         $this->assertGreaterThanOrEqual(1, \count($http_cfg));
-        $keys = [HttpResponse::HTTP_UNAUTHORIZED,];
+        $keys = [HttpResponse::HTTP_UNAUTHORIZED];
 
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $http_cfg);
-            $this->checkExHandlerConfigStructure($http_cfg[ $key ], null, ($key == RB::KEY_DEFAULT));
+            $this->checkExHandlerConfigStructure($http_cfg[$key], null, ($key == RB::KEY_DEFAULT));
         }
         $this->assertArrayHasKey(RB::KEY_DEFAULT, $http_cfg);
-        $this->checkExHandlerConfigStructure($http_cfg[ RB::KEY_DEFAULT ]);
+        $this->checkExHandlerConfigStructure($http_cfg[RB::KEY_DEFAULT]);
 
         // check default handler config
-        $this->checkExHandlerConfigStructure($cfg[ RB::KEY_DEFAULT ][ RB::KEY_CONFIG ]);
+        $this->checkExHandlerConfigStructure($cfg[RB::KEY_DEFAULT][RB::KEY_CONFIG]);
     }
 
     /**
@@ -273,7 +274,7 @@ class ExceptionHandlerHelperTest extends TestCase
     public function testBaseConfigHttpExceptionConfig(): void
     {
         $http_cfg = $this->getExceptionHandlerConfig();
-        $cfg = $http_cfg[ HttpException::class ][ RB::KEY_CONFIG ];
+        $cfg = $http_cfg[HttpException::class][RB::KEY_CONFIG];
 
         foreach ($cfg as $code => $params) {
             if (\is_int($code)) {
@@ -299,10 +300,10 @@ class ExceptionHandlerHelperTest extends TestCase
         $cfg = [
             RB::KEY_DEFAULT => [
                 RB::KEY_HANDLER => DefaultExceptionHandler::class,
-                RB::KEY_CONFIG  => [
-                    RB::KEY_API_CODE  => $api_code,
+                RB::KEY_CONFIG => [
+                    RB::KEY_API_CODE => $api_code,
                     RB::KEY_HTTP_CODE => $http_code,
-                    RB::KEY_MSG_KEY   => $msg_key,
+                    RB::KEY_MSG_KEY => $msg_key,
                     RB::KEY_MSG_FORCE => false,
                 ],
             ],
@@ -315,7 +316,7 @@ class ExceptionHandlerHelperTest extends TestCase
 
         /** @var HttpResponse $http_response */
         $http_response = Lockpick::call(
-            ExceptionHandlerHelper::class, 'render', [null, $ex,]);
+            ExceptionHandlerHelper::class, 'render', [null, $ex]);
         $api = ApiResponse::fromJson($this->getResponseContent($http_response));
 
         // THEN we should see exception message.
@@ -341,9 +342,9 @@ class ExceptionHandlerHelperTest extends TestCase
         $cfg = [
             'map' => [
                 'default' => [
-                    'api_code'  => $api_code,
+                    'api_code' => $api_code,
                     'http_code' => $http_code,
-                    'msg_key'   => $msg_key,
+                    'msg_key' => $msg_key,
                     'msg_force' => true,
                 ],
             ],
@@ -355,11 +356,11 @@ class ExceptionHandlerHelperTest extends TestCase
 
         /** @var HttpResponse $http_response */
         $http_response = Lockpick::call(ExceptionHandlerHelper::class, 'error', [
-                $ex,
-                $api_code,
-                $http_code,
-                $msg_key,
-            ]
+            $ex,
+            $api_code,
+            $http_code,
+            $msg_key,
+        ]
         );
 
         $api = ApiResponse::fromJson($this->getResponseContent($http_response));
@@ -389,8 +390,8 @@ class ExceptionHandlerHelperTest extends TestCase
         } while ($fallback_http_code === $http_code);
 
         $ex_cfg = [
-            'api_code'    => $api_code,
-            'http_code'   => $http_code,
+            'api_code' => $api_code,
+            'http_code' => $http_code,
             'msg_enforce' => true,
         ];
 
@@ -410,7 +411,7 @@ class ExceptionHandlerHelperTest extends TestCase
         $msg = $ex->getMessage();
         $placeholders = [
             'api_code' => $api_code,
-            'message'  => ($msg !== '') ? $msg : '???',
+            'message' => ($msg !== '') ? $msg : '???',
         ];
         $expected_msg_key = Lockpick::call(ExceptionHandlerHelper::class,
             'getErrorMessageForException', [
@@ -431,13 +432,13 @@ class ExceptionHandlerHelperTest extends TestCase
     /**
      * Performs tests to ensure error() fallback mechanism for HTTP codes works correctly.
      *
-     * @param int           $expected_http_code Expected HTTP code to be returned in response.
-     * @param HttpException $ex                 Exception to use for testing.
-     * @param int           $config_http_code   HTTP code to set as part for exception handler configuration
+     * @param  int  $expected_http_code  Expected HTTP code to be returned in response.
+     * @param  HttpException  $ex  Exception to use for testing.
+     * @param  int  $config_http_code  HTTP code to set as part for exception handler configuration
      */
-    protected function doTestErrorMethodFallbackMechanism(int           $expected_http_code,
-                                                          HttpException $ex,
-                                                          int           $config_http_code): void
+    protected function doTestErrorMethodFallbackMechanism(int $expected_http_code,
+        HttpException $ex,
+        int $config_http_code): void
     {
         // HAVING incorrectly configured exception handler
         $cfg = [
@@ -445,7 +446,7 @@ class ExceptionHandlerHelperTest extends TestCase
                 HttpException::class => [
                     HttpResponse::HTTP_NOT_FOUND => [
                         // i.e. OK (0) is invalid code for error response.
-                        'api_code'  => BaseApiCodes::EX_HTTP_NOT_FOUND(),
+                        'api_code' => BaseApiCodes::EX_HTTP_NOT_FOUND(),
                         'http_code' => $config_http_code,
                     ],
                 ],
@@ -482,7 +483,7 @@ class ExceptionHandlerHelperTest extends TestCase
         \App::setLocale($default_lang);
 
         // We must NOT call langGet() wrapper as we want whole translation array
-        return (array)\Lang::get('response-builder::builder');
+        return (array) \Lang::get('response-builder::builder');
     }
 
     /**
@@ -502,13 +503,9 @@ class ExceptionHandlerHelperTest extends TestCase
 
     /**
      * Checks if exception handler's configuration array structure fullfils expectations.
-     *
-     * @param array    $params
-     * @param int|null $code
-     * @param bool     $is_default_handler
      */
     protected function checkExHandlerConfigStructure(array $params, ?int $code = null,
-                                                     bool  $is_default_handler = false): void
+        bool $is_default_handler = false): void
     {
         if (\is_int($code)) {
             $this->assertGreaterThanOrEqual(RB::ERROR_HTTP_CODE_MIN, $code);
@@ -553,15 +550,14 @@ class ExceptionHandlerHelperTest extends TestCase
         $diff = [];
         $allowed_keys = \array_merge($mandatory_keys, $optional_keys);
         foreach ($params as $key => $val) {
-            if (!\in_array($key, $allowed_keys)) {
+            if (! \in_array($key, $allowed_keys)) {
                 $diff[] = $key;
             }
         }
 
         $sep = "\n  ";
         $code_name = $code ?? '"default"';
-        $msg = "Unsupported keys in config for HTTP Exception, handler for code {$code_name}:${sep}" . implode($sep, $diff);
+        $msg = "Unsupported keys in config for HTTP Exception, handler for code {$code_name}:${sep}".implode($sep, $diff);
         $this->assertEmpty($diff, $msg);
     }
-
 } // end of class

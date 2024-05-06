@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
@@ -9,6 +10,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -33,8 +35,8 @@ class ExceptionHandlerHelper
     /**
      * Render an exception into valid API response.
      *
-     * @param \Illuminate\Http\Request $request Request object
-     * @param \Throwable               $ex      Throwable to handle
+     * @param  \Illuminate\Http\Request  $request  Request object
+     * @param  \Throwable  $ex  Throwable to handle
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
@@ -57,12 +59,12 @@ class ExceptionHandlerHelper
         do {
             if ($cfg === null) {
                 // Default handler MUST be present by design and always return something useful.
-                $cfg = static::getExceptionHandlerConfig()[ RB::KEY_DEFAULT ];
+                $cfg = static::getExceptionHandlerConfig()[RB::KEY_DEFAULT];
             }
 
-            $handler = new $cfg[ RB::KEY_HANDLER ]();
-            /**  @var ExceptionHandlerContract $handler */
-            $handler_result = $handler->handle($cfg[ RB::KEY_CONFIG ], $ex);
+            $handler = new $cfg[RB::KEY_HANDLER];
+            /** @var ExceptionHandlerContract $handler */
+            $handler_result = $handler->handle($cfg[RB::KEY_CONFIG], $ex);
             if ($handler_result !== null) {
                 $result = static::processException($ex, $handler_result);
             } else {
@@ -77,15 +79,15 @@ class ExceptionHandlerHelper
     /**
      * Handles given throwable and produces valid HTTP response object.
      *
-     * @param \Throwable $ex                 Throwable to be handled.
-     * @param array      $ex_cfg             ExceptionHandler's config excerpt related to $ex exception type.
-     * @param int        $fallback_http_code HTTP code to be assigned to produced $ex related response in
-     *                                       case configuration array lacks own `http_code` value. Default
-     *                                       HttpResponse::HTTP_INTERNAL_SERVER_ERROR
-     *
+     * @param  \Throwable  $ex  Throwable to be handled.
+     * @param  array  $ex_cfg  ExceptionHandler's config excerpt related to $ex exception type.
+     * @param  int  $fallback_http_code  HTTP code to be assigned to produced $ex related response in
+     *                                   case configuration array lacks own `http_code` value. Default
+     *                                   HttpResponse::HTTP_INTERNAL_SERVER_ERROR
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * NOTE: no return typehint due to compatibility with Laravel signature.
+     *
      * @noinspection PhpMissingReturnTypeInspection
      * @noinspection ReturnTypeCanBeDeclaredInspection
      *
@@ -97,7 +99,7 @@ class ExceptionHandlerHelper
      * @throws Ex\ArrayWithMixedKeysException
      */
     protected static function processException(\Throwable $ex, array $ex_cfg,
-                                               int        $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
+        int $fallback_http_code = HttpResponse::HTTP_INTERNAL_SERVER_ERROR)
     {
         $api_code = $ex_cfg['api_code'];
         $http_code = $ex_cfg['http_code'] ?? $fallback_http_code;
@@ -108,7 +110,7 @@ class ExceptionHandlerHelper
         $msg = $ex->getMessage();
         $placeholders = [
             'api_code' => $api_code,
-            'message'  => ($msg !== '') ? $msg : '???',
+            'message' => ($msg !== '') ? $msg : '???',
         ];
 
         // shall we enforce error message?
@@ -117,7 +119,7 @@ class ExceptionHandlerHelper
             // there's no msg_key configured for this exact code, so let's obtain our default message
             $msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
                 : Lang::get($msg_key, $placeholders);
-        } else if ($msg === '') {
+        } elseif ($msg === '') {
             // nothing enforced, handling pipeline: ex_message -> user_defined_msg -> http_ex -> default
             $msg = ($msg_key === null) ? static::getErrorMessageForException($ex, $http_code, $placeholders)
                 : Lang::get($msg_key, $placeholders);
@@ -138,9 +140,6 @@ class ExceptionHandlerHelper
      * `default` handler either for HttpException (if $ex is instance of it), or generic `default`
      * config.
      *
-     * @param \Throwable $ex
-     * @param int        $http_code
-     * @param array      $placeholders
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\IncompatibleTypeException
@@ -148,11 +147,11 @@ class ExceptionHandlerHelper
      * @throws Ex\NotIntegerException
      */
     protected static function getErrorMessageForException(\Throwable $ex, int $http_code,
-                                                          array      $placeholders): string
+        array $placeholders): string
     {
         // exception message is uselss, lets go deeper
         if ($ex instanceof HttpException) {
-            $error_message = Lang::get("response-builder::builder.http_{$http_code}", $placeholders);
+            $error_message = Lang::get('response-builder::builder.http_'.$http_code, $placeholders);
         } else {
             // Still got nothing? Fall back to built-in generic message for this type of exception.
             $http_ex_cls = HttpException::class;
@@ -166,7 +165,7 @@ class ExceptionHandlerHelper
 
         // As Lang::get() is documented to also returning arrays(?)...
         if (is_array($error_message)) {
-            $error_message = implode('', $error_message);
+            return implode('', $error_message);
         }
 
         return $error_message;
@@ -175,8 +174,7 @@ class ExceptionHandlerHelper
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param \Illuminate\Http\Request                 $request
-     * @param \Illuminate\Auth\AuthenticationException $exception
+     * @param  \Illuminate\Http\Request  $request
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
@@ -189,7 +187,6 @@ class ExceptionHandlerHelper
      * @noinspection UnknownInspectionInspection
      *
      * NOTE: not typehints due to compatibility with Laravel's method signature.
-     *
      * @noinspection PhpMissingParamTypeInspection
      * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
      */
@@ -198,7 +195,7 @@ class ExceptionHandlerHelper
         $cfg = static::getExceptionHandlerConfig();
 
         // This config entry is guaranted to exist. Enforced by tests.
-        $cfg = $cfg[ HttpException::class ][ RB::KEY_CONFIG ][ HttpResponse::HTTP_UNAUTHORIZED ];
+        $cfg = $cfg[HttpException::class][RB::KEY_CONFIG][HttpResponse::HTTP_UNAUTHORIZED];
 
         /**
          * NOTE: no typehint due to compatibility with Laravel signature.
@@ -211,10 +208,7 @@ class ExceptionHandlerHelper
     /**
      * Process single error and produce valid API response.
      *
-     * @param \Throwable  $ex Exception to be handled.
-     * @param integer     $api_code
-     * @param int|null    $http_code
-     * @param string|null $error_message
+     * @param  \Throwable  $ex  Exception to be handled.
      *
      * @throws Ex\MissingConfigurationKeyException
      * @throws Ex\ConfigurationNotFoundException
@@ -224,8 +218,8 @@ class ExceptionHandlerHelper
      * @throws Ex\NotIntegerException
      */
     protected static function error(Throwable $ex, int $api_code,
-                                    ?int      $http_code = null,
-                                    ?string   $error_message = null): HttpResponse
+        ?int $http_code = null,
+        ?string $error_message = null): HttpResponse
     {
         $ex_http_code = ($ex instanceof HttpException) ? $ex->getStatusCode() : $ex->getCode();
         $http_code = $http_code ?? $ex_http_code;
@@ -237,6 +231,7 @@ class ExceptionHandlerHelper
             // Not a valid code, let's try to get the exception status.
             $http_code = $ex_http_code;
         }
+
         // Can it be considered a valid HTTP error code?
         if ($http_code < RB::ERROR_HTTP_CODE_MIN) {
             // We now handle uncaught exception, so we cannot throw another one if there's
@@ -252,8 +247,8 @@ class ExceptionHandlerHelper
             $debug_data = [
                 Config::get(RB::CONF_KEY_DEBUG_EX_TRACE_KEY, RB::KEY_TRACE) => [
                     RB::KEY_CLASS => \get_class($ex),
-                    RB::KEY_FILE  => $ex->getFile(),
-                    RB::KEY_LINE  => $ex->getLine(),
+                    RB::KEY_FILE => $ex->getFile(),
+                    RB::KEY_LINE => $ex->getLine(),
                 ],
             ];
         }
@@ -286,10 +281,10 @@ class ExceptionHandlerHelper
         $default_config = [
             HttpException::class => [
                 'handler' => HttpExceptionHandler::class,
-                'pri'     => -100,
-                'config'  => [
+                'pri' => -100,
+                'config' => [
                     // used by unauthenticated() to obtain api and http code for the exception
-                    HttpResponse::HTTP_UNAUTHORIZED         => [
+                    HttpResponse::HTTP_UNAUTHORIZED => [
                         RB::KEY_API_CODE => BaseApiCodes::EX_AUTHENTICATION_EXCEPTION(),
                     ],
                     // Required by ValidationException handler
@@ -298,7 +293,7 @@ class ExceptionHandlerHelper
                     ],
 
                     RB::KEY_DEFAULT => [
-                        RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+                        RB::KEY_API_CODE => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                         RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
                     ],
                 ],
@@ -306,11 +301,11 @@ class ExceptionHandlerHelper
             ],
 
             // default handler is mandatory. `default` entry MUST have both `api_code` and `http_code` set.
-            RB::KEY_DEFAULT      => [
+            RB::KEY_DEFAULT => [
                 'handler' => DefaultExceptionHandler::class,
-                'pri'     => -127,
-                'config'  => [
-                    RB::KEY_API_CODE  => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
+                'pri' => -127,
+                'config' => [
+                    RB::KEY_API_CODE => BaseApiCodes::EX_UNCAUGHT_EXCEPTION(),
                     RB::KEY_HTTP_CODE => HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
                 ],
             ],
@@ -318,7 +313,7 @@ class ExceptionHandlerHelper
 
         /** @var array $user_handler_config */
         $user_handler_config = \Config::get(RB::CONF_KEY_EXCEPTION_HANDLER, []);
-        $cfg = Util::mergeConfig($default_config, $user_handler_config );
+        $cfg = Util::mergeConfig($default_config, $user_handler_config);
 
         Util::sortArrayByPri($cfg);
 
@@ -329,7 +324,7 @@ class ExceptionHandlerHelper
      * Returns config of exception handler class, configured to process specified exception class
      * or @null if no exception handler can be determined.
      *
-     * @param \Throwable $ex Exception to handle
+     * @param  \Throwable  $ex  Exception to handle
      *
      * @throws Ex\IncompatibleTypeException
      * @throws Ex\InvalidTypeException
@@ -345,14 +340,14 @@ class ExceptionHandlerHelper
 
         // check for exact class name match...
         if (\array_key_exists($cls, $cfg)) {
-            $result = $cfg[ $cls ];
+            $result = $cfg[$cls];
         } else {
             // no exact match, then lets try with `instanceof`
             // Config entries are already sorted by priority.
             foreach (\array_keys($cfg) as $class_name) {
                 /** @var string $class_name */
                 if ($ex instanceof $class_name) {
-                    $result = $cfg[ $class_name ];
+                    $result = $cfg[$class_name];
                     break;
                 }
             }
@@ -360,5 +355,4 @@ class ExceptionHandlerHelper
 
         return $result;
     }
-
 } // end of class

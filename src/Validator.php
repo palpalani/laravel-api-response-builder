@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MarcinOrlowski\ResponseBuilder;
@@ -9,6 +10,7 @@ namespace MarcinOrlowski\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -26,8 +28,8 @@ final class Validator
     /**
      * Checks if given $val is of type boolean
      *
-     * @param string $var_name Name of the key to be used if exception is thrown.
-     * @param mixed  $value    Variable to be asserted.
+     * @param  string  $var_name  Name of the key to be used if exception is thrown.
+     * @param  mixed  $value  Variable to be asserted.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotBooleanException
@@ -40,8 +42,8 @@ final class Validator
     /**
      * Checks if given $val is of type integer
      *
-     * @param string $var_name Name of the key to be used if exception is thrown.
-     * @param mixed  $value    Variable to be asserted.
+     * @param  string  $var_name  Name of the key to be used if exception is thrown.
+     * @param  mixed  $value  Variable to be asserted.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
@@ -54,8 +56,8 @@ final class Validator
     /**
      * Checks if given $val is of type array
      *
-     * @param string $var_name Name of the key to be used if exception is thrown.
-     * @param mixed  $value    Variable to be asserted.
+     * @param  string  $var_name  Name of the key to be used if exception is thrown.
+     * @param  mixed  $value  Variable to be asserted.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotArrayException
@@ -68,8 +70,8 @@ final class Validator
     /**
      * Checks if given $val is an object
      *
-     * @param string $var_name Name of the key to be used if exception is thrown.
-     * @param mixed  $value    Variable to be asserted.
+     * @param  string  $var_name  Name of the key to be used if exception is thrown.
+     * @param  mixed  $value  Variable to be asserted.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotObjectException
@@ -82,8 +84,7 @@ final class Validator
     /**
      * Checks if given $cls_cls_or_obj is either an object or name of existing class.
      *
-     * @param string        $var_name
-     * @param string|object $cls_or_obj
+     * @param  string|object  $cls_or_obj
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\ClassNotFound
@@ -96,8 +97,8 @@ final class Validator
     /**
      * Checks if given $val is of type string
      *
-     * @param string $var_name Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $value    Variable to be asserted.
+     * @param  string  $var_name  Label or name of the variable to be used in exception message (if thrown).
+     * @param  mixed  $value  Variable to be asserted.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotStringException
@@ -108,10 +109,10 @@ final class Validator
     }
 
     /**
-     * @param string $var_name Label or name of the variable to be used in exception message (if thrown).
-     * @param int    $value    Variable to be asserted.
-     * @param int    $min      Min allowed value (inclusive)
-     * @param int    $max      Max allowed value (inclusive)
+     * @param  string  $var_name  Label or name of the variable to be used in exception message (if thrown).
+     * @param  int  $value  Variable to be asserted.
+     * @param  int  $min  Min allowed value (inclusive)
+     * @param  int  $max  Max allowed value (inclusive)
      *
      * @throws \InvalidArgumentException
      * @throws \OutOfBoundsException
@@ -139,20 +140,20 @@ final class Validator
      * Checks if $item (of name $key) is of type that is include in $allowed_types (there's `OR` connection
      * between specified types).
      *
-     * @param string $var_name      Label or name of the variable to be used in exception message (if thrown).
-     * @param mixed  $value         Variable to be asserted.
-     * @param array  $allowed_types Array of allowed types for $value, i.e. [Type::INTEGER]
-     * @param string $ex_class      Name of exception class (which implements InvalidTypeExceptionContract) to
-     *                              be used when assertion fails. In that case object of that class will be
-     *                              instantiated and thrown.
+     * @param  string  $var_name  Label or name of the variable to be used in exception message (if thrown).
+     * @param  mixed  $value  Variable to be asserted.
+     * @param  array  $allowed_types  Array of allowed types for $value, i.e. [Type::INTEGER]
+     * @param  string  $ex_class  Name of exception class (which implements InvalidTypeExceptionContract) to
+     *                            be used when assertion fails. In that case object of that class will be
+     *                            instantiated and thrown.
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\ClassNotFound
      */
     public static function assertIsType(string $var_name, $value, array $allowed_types,
-                                        string $ex_class = Ex\InvalidTypeException::class): void
+        string $ex_class = Ex\InvalidTypeException::class): void
     {
-        if (empty($allowed_types)) {
+        if ($allowed_types === []) {
             throw new \InvalidArgumentException('The $allowed_types array cannot be empty.');
         }
 
@@ -161,7 +162,7 @@ final class Validator
         $idx = \array_search(Type::EXISTING_CLASS, $tmp, true);
         if ($idx !== false) {
             // Remove the type, so gettype() test loop won't see it.
-            unset($tmp[ $idx ]);
+            unset($tmp[$idx]);
             if (\is_string($value) && \class_exists($value)) {
                 // It's existing class, no need to test further.
                 return;
@@ -171,8 +172,8 @@ final class Validator
         // Get current type of the $value and next, validate
         $value_type = \gettype($value);
 
-        if (!empty($tmp)) {
-            if (!\in_array($value_type, $allowed_types, true)) {
+        if ($tmp !== []) {
+            if (! \in_array($value_type, $allowed_types, true)) {
                 // FIXME we need to ensure $ex_class implements InvalidTypeExceptionContract at some point.
                 /** @var \Exception $ex_class */
                 throw new $ex_class($var_name, $value_type, $allowed_types);
@@ -186,7 +187,6 @@ final class Validator
     /**
      * Ensures given $http_code is valid code for error response.
      *
-     * @param int $http_code
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
@@ -201,7 +201,6 @@ final class Validator
     /**
      * Ensures given $http_code is valid for response indicating sucessful operation.
      *
-     * @param int $http_code
      *
      * @throws Ex\InvalidTypeException
      * @throws Ex\NotIntegerException
@@ -216,16 +215,16 @@ final class Validator
      * Ensures $obj (that is value coming from variable, which name is passed in $label) is instance of $cls
      * class.
      *
-     * @param string $var_name Name of variable that the $obj value is coming from. Used for exception
-     *                         message.
-     * @param object $obj      Object to check instance of
-     * @param string $cls      Target class we want to check $obj agains.
+     * @param  string  $var_name  Name of variable that the $obj value is coming from. Used for exception
+     *                            message.
+     * @param  object  $obj  Object to check instance of
+     * @param  string  $cls  Target class we want to check $obj agains.
      *
      * @throws \InvalidArgumentException
      */
     public static function assertInstanceOf(string $var_name, object $obj, string $cls): void
     {
-        if (!($obj instanceof $cls)) {
+        if (! ($obj instanceof $cls)) {
             throw new \InvalidArgumentException(
                 \sprintf('"%s" must be instance of "%s".', $var_name, $cls)
             );
@@ -237,7 +236,6 @@ final class Validator
      * be turned into JSON object or array without user specified keys (['bar']) which we would return as JSON
      * array. But you can't mix these two as the final JSON would not produce predictable results.
      *
-     * @param array $data
      *
      * @throws Ex\ArrayWithMixedKeysException
      */
@@ -248,16 +246,17 @@ final class Validator
         foreach (\array_keys($data) as $key) {
             if (\is_int($key)) {
                 if ($string_keys_cnt > 0) {
-                    throw new Ex\ArrayWithMixedKeysException();
+                    throw new Ex\ArrayWithMixedKeysException;
                 }
+
                 $int_keys_cnt++;
             } else {
                 if ($int_keys_cnt > 0) {
-                    throw new Ex\ArrayWithMixedKeysException();
+                    throw new Ex\ArrayWithMixedKeysException;
                 }
+
                 $string_keys_cnt++;
             }
         }
     }
-
 } // end of class

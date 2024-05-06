@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\ResponseBuilder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -82,7 +83,7 @@ class InternalsTest extends TestCase
      */
     public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMaxBounds(): void
     {
-        $obj = new BaseApiCodes();
+        $obj = new BaseApiCodes;
         $max = Lockpick::getConstant($obj, 'RESERVED_MAX_API_CODE_OFFSET');
 
         $this->expectException(\OutOfBoundsException::class);
@@ -94,7 +95,7 @@ class InternalsTest extends TestCase
      */
     public function testGetCodeForInternalOffsetMethodWithOffsetOutOfMinBounds(): void
     {
-        $obj = new BaseApiCodes();
+        $obj = new BaseApiCodes;
         $min = Lockpick::getConstant($obj, 'RESERVED_MIN_API_CODE_OFFSET');
 
         $this->expectException(\OutOfBoundsException::class);
@@ -136,17 +137,15 @@ class InternalsTest extends TestCase
         }
     }
 
-
     /**
      * Checks if missing config for class, throws exception.
      */
     public function testGetClassMappingConfigOrThrowWithNoConfig(): void
     {
-        $converter = new Converter();
+        $converter = new Converter;
         $model = new TestModel('');
 
         $this->expectException(Ex\ConfigurationNotFoundException::class);
         Lockpick::call($converter, 'getClassMappingConfigOrThrow', [$model]);
     }
-
 } // end of class

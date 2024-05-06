@@ -13,6 +13,7 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  * @author    Marcin Orlowski <mail (#) marcinOrlowski (.) com>
  * @copyright 2016-2024 Marcin Orlowski
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/MarcinOrlowski/laravel-api-response-builder
  */
 
@@ -24,5 +25,5 @@ namespace MarcinOrlowski\ResponseBuilder\Tests\Builder;
  */
 class DummyResponseBuilder extends \MarcinOrlowski\ResponseBuilder\ResponseBuilder
 {
-// dummy
+    // dummy
 }
